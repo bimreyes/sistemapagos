@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de {{client.name}}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(255, 118, 117, 0.2);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .client-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .client-info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #ff7675;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .info-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .info-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .report-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .chart-header {
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .chart-description {
+            color: #6c757d;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .report-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .report-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .no-chart {
+            padding: 80px 40px;
+            color: #6c757d;
+        }
+
+        .no-chart-icon {
+            font-size: 5rem;
+            margin-bottom: 25px;
+            color: #ff7675;
+        }
+
+        .no-chart h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-weight: 300;
+        }
+
+        .no-chart p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .chart-actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 118, 117, 0.3);
+        }
+
+        .secondary-btn {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+
+        .secondary-btn:hover {
+            box-shadow: 0 8px 20px rgba(116, 185, 255, 0.3);
+        }
+
+        .success-btn {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        }
+
+        .success-btn:hover {
+            box-shadow: 0 8px 20px rgba(0, 184, 148, 0.3);
+        }
+
+        .chart-stats {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff7675;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 25px 20px;
+            }
+
+            .header h2 {
+                font-size: 2rem;
+            }
+
+            .client-subtitle {
+                font-size: 1rem;
+            }
+
+            .report-container {
+                padding: 25px 20px;
+            }
+
+            .no-chart {
+                padding: 60px 20px;
+            }
+
+            .no-chart-icon {
+                font-size: 4rem;
+            }
+
+            .no-chart h3 {
+                font-size: 1.6rem;
+            }
+
+            .no-chart p {
+                font-size: 1rem;
+            }
+
+            .chart-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .action-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h2>📊 Reporte Individual</h2>
+            <div class='client-subtitle'>Análisis de {{client.name}}</div>
+        </div>
+
+        <div class='client-info-card'>
+            <div class='info-grid'>
+                <div class='info-item'>
+                    <div class='info-label'>👤 Cliente</div>
+                    <div class='info-value'>{{client.name}}</div>
+                </div>
+                <div class='info-item'>
+                    <div class='info-label'>🆔 ID</div>
+                    <div class='info-value'>#{{client.id}}</div>
+                </div>
+                <div class='info-item'>
+                    <div class='info-label'>📅 Fecha</div>
+                    <div class='info-value'>Actual</div>
+                </div>
+            </div>
+        </div>
+
+        {% if img %}
+        <div class='chart-stats'>
+            <div class='stats-grid'>
+                <div class='stat-item'>
+                    <div class='stat-number'>12</div>
+                    <div class='stat-label'>Pagos Totales</div>
+                </div>
+                <div class='stat-item'>
+                    <div class='stat-number'>85%</div>
+                    <div class='stat-label'>Tasa de Pago</div>
+                </div>
+                <div class='stat-item'>
+                    <div class='stat-number'>$1,250</div>
+                    <div class='stat-label'>Total Pagado</div>
+                </div>
+                <div class='stat-item'>
+                    <div class='stat-number'>2</div>
+                    <div class='stat-label'>Pendientes</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class='report-container'>
+            {% if img %}
+                <div class='chart-header'>
+                    <h3 class='chart-title'>📈 Historial de Pagos</h3>
+                    <p class='chart-description'>
+                        Gráfico detallado del comportamiento de pagos de {{client.name}} a lo largo del tiempo
+                    </p>
+                </div>
+                
+                <img src='{{img}}' alt='Gráfico del reporte de {{client.name}}' class='report-image'>
+                
+                <div class='chart-actions'>
+                    <button class='action-btn' onclick='window.location.reload()'>🔄 Actualizar</button>
+                    <button class='action-btn secondary-btn' onclick='window.print()'>🖨️ Imprimir</button>
+                    <a href='/payments/client/{{client.id}}' class='action-btn success-btn'>💳 Ver Pagos</a>
+                </div>
+            {% else %}
+                <div class='no-chart'>
+                    <div class='no-chart-icon'>📊</div>
+                    <h3>Gráfico no disponible</h3>
+                    <p>
+                        No se pudieron cargar los datos para generar el gráfico de <strong>{{client.name}}</strong>. 
+                        Esto puede deberse a que no hay suficientes datos de pagos registrados para este cliente.
+                    </p>
+                    
+                    <div class='chart-actions'>
+                        <button class='action-btn' onclick='window.location.reload()'>🔄 Intentar de nuevo</button>
+                        <a href='/payments/client/{{client.id}}' class='action-btn secondary-btn'>💳 Gestionar Pagos</a>
+                        <a href='/clients/detail/{{client.id}}' class='action-btn success-btn'>👤 Ver Cliente</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

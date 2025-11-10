@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes del Sistema</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 184, 148, 0.2);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .report-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .report-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .report-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .no-chart {
+            padding: 80px 40px;
+            color: #6c757d;
+        }
+
+        .no-chart-icon {
+            font-size: 5rem;
+            margin-bottom: 25px;
+            color: #00b894;
+        }
+
+        .no-chart h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-weight: 300;
+        }
+
+        .no-chart p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .chart-actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 184, 148, 0.3);
+        }
+
+        .secondary-btn {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+
+        .secondary-btn:hover {
+            box-shadow: 0 8px 20px rgba(116, 185, 255, 0.3);
+        }
+
+        .chart-info {
+            background: #e8f5e8;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .chart-info h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .loading-animation {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #00b894;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 40px 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 25px 20px;
+            }
+
+            .header h2 {
+                font-size: 2rem;
+            }
+
+            .report-container {
+                padding: 25px 20px;
+            }
+
+            .no-chart {
+                padding: 60px 20px;
+            }
+
+            .no-chart-icon {
+                font-size: 4rem;
+            }
+
+            .no-chart h3 {
+                font-size: 1.6rem;
+            }
+
+            .no-chart p {
+                font-size: 1rem;
+            }
+
+            .chart-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .action-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h2>📊 Reportes del Sistema</h2>
+            <p>Análisis visual de datos y estadísticas</p>
+        </div>
+
+        <div class='report-container'>
+            {% if img %}
+                <div class='chart-info'>
+                    <h4>📈 Gráfico Generado</h4>
+                    <p>El siguiente gráfico muestra los datos actualizados del sistema. Utilice las opciones disponibles para interactuar con la información.</p>
+                </div>
+                
+                <img src='{{img}}' alt='Gráfico del reporte' class='report-image'>
+                
+                <div class='chart-actions'>
+                    <button class='action-btn' onclick='window.location.reload()'>🔄 Actualizar</button>
+                    <button class='action-btn secondary-btn' onclick='window.print()'>🖨️ Imprimir</button>
+                </div>
+            {% else %}
+                <div class='no-chart'>
+                    <div class='no-chart-icon'>📊</div>
+                    <h3>Gráfico no disponible</h3>
+                    <p>En este momento no hay datos suficientes para generar el gráfico solicitado. Esto puede deberse a que no hay información registrada en el sistema o los datos están siendo procesados.</p>
+                    
+                    <div class='chart-actions'>
+                        <button class='action-btn' onclick='window.location.reload()'>🔄 Intentar de nuevo</button>
+                        <a href='/clients/' class='action-btn secondary-btn'>👥 Ver Clientes</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

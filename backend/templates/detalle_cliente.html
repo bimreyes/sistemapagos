@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Cliente</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .client-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .client-header h2 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+        }
+
+        .client-phone {
+            color: #17a2b8;
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .quick-actions {
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .files-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .files-section h4 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .files-list {
+            list-style: none;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .file-item:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .file-thumbnail {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #dee2e6;
+        }
+
+        .file-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .file-link {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            flex-grow: 1;
+        }
+
+        .file-link:hover {
+            color: #667eea;
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .empty-files {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+
+        .empty-files-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .client-header {
+                padding: 20px;
+                text-align: center;
+            }
+
+            .client-header h2 {
+                font-size: 2rem;
+            }
+
+            .client-phone {
+                font-size: 1.1rem;
+            }
+
+            .files-section {
+                padding: 20px;
+            }
+
+            .file-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        {% if client %}
+        <div class='client-header'>
+            <h2>👤 {{client.name}}</h2>
+            <div class='client-phone'>📞 {{client.phone}}</div>
+            <div class='quick-actions'>
+                <a href='/payments/client/{{client.id}}' class='action-btn'>💳 Ver Pagos</a>
+            </div>
+        </div>
+
+        <div class='files-section'>
+            <h4>📁 Archivos del Cliente</h4>
+            {% if uploads %}
+            <ul class='files-list'>
+                {% for u in uploads %}
+                <li class='file-item'>
+                    {% if u['thumb_path'] %}
+                    <img src='{{u["thumb_path"]}}' alt='Thumbnail' class='file-thumbnail'>
+                    {% else %}
+                    <div class='file-icon'>📄</div>
+                    {% endif %}
+                    <a href='/uploads/download/{{u.client_id}}/{{u.filename}}' class='file-link'>
+                        {{u.filename}}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class='empty-files'>
+                <div class='empty-files-icon'>📂</div>
+                <p>No hay archivos subidos para este cliente</p>
+            </div>
+            {% endif %}
+        </div>
+
+        {% else %}
+        <div class='form-section'>
+            <h3>➕ Agregar Nuevo Cliente</h3>
+            <form method='post'>
+                <div class='form-group'>
+                    <input name='name' class='form-input' placeholder='Nombre completo' required>
+                </div>
+                
+                <div class='form-group'>
+                    <input name='phone' class='form-input' placeholder='Número de teléfono' required>
+                </div>
+                
+                <div class='form-group'>
+                    <input name='monthly_amount' class='form-input' placeholder='Monto mensual' type='number' step='0.01' required>
+                </div>
+                
+                <div class='form-group'>
+                    <input type='date' name='signup_date' class='form-input' required>
+                </div>
+                
+                <button type='submit' class='submit-btn'>💾 Guardar Cliente</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

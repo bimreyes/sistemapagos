@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial del Sistema</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6c5ce7 0%, #74b9ff 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.2);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table thead {
+            background: linear-gradient(135deg, #6c5ce7 0%, #74b9ff 100%);
+        }
+
+        .table th {
+            padding: 20px 15px;
+            text-align: left;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .date-cell {
+            font-weight: 600;
+            color: #2c3e50;
+            white-space: nowrap;
+            min-width: 150px;
+        }
+
+        .table-name {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .operation-create {
+            background: #d4edda;
+            color: #155724;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .operation-update {
+            background: #fff3cd;
+            color: #856404;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .operation-delete {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .user-cell {
+            font-weight: 600;
+            color: #6c5ce7;
+        }
+
+        .data-cell {
+            max-width: 250px;
+        }
+
+        .data-cell pre {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .empty-data {
+            color: #6c757d;
+            font-style: italic;
+            text-align: center;
+        }
+
+        @media (max-width: 1200px) {
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 1000px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 25px 20px;
+            }
+
+            .header h2 {
+                font-size: 2rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 12px 8px;
+                font-size: 0.9rem;
+            }
+
+            .data-cell {
+                max-width: 200px;
+            }
+
+            .data-cell pre {
+                font-size: 0.8rem;
+                padding: 8px;
+                max-height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h2>📋 Historial del Sistema</h2>
+            <p>Registro completo de todas las actividades y cambios realizados</p>
+        </div>
+
+        <div class='table-container'>
+            <table class='table'>
+                <thead>
+                    <tr>
+                        <th>📅 Fecha y Hora</th>
+                        <th>🗃️ Tabla</th>
+                        <th>⚡ Operación</th>
+                        <th>👤 Usuario</th>
+                        <th>📄 Valores Anteriores</th>
+                        <th>📝 Valores Nuevos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in rows %}
+                    <tr>
+                        <td class='date-cell'>{{r.fecha_hora}}</td>
+                        <td>
+                            <span class='table-name'>{{r.tabla}}</span>
+                        </td>
+                        <td>
+                            {% if r.operacion == 'CREATE' %}
+                            <span class='operation-create'>➕ {{r.operacion}}</span>
+                            {% elif r.operacion == 'UPDATE' %}
+                            <span class='operation-update'>✏️ {{r.operacion}}</span>
+                            {% elif r.operacion == 'DELETE' %}
+                            <span class='operation-delete'>🗑️ {{r.operacion}}</span>
+                            {% else %}
+                            <span class='operation-update'>{{r.operacion}}</span>
+                            {% endif %}
+                        </td>
+                        <td class='user-cell'>{{r.usuario}}</td>
+                        <td class='data-cell'>
+                            {% if r.old_values %}
+                            <pre>{{r.old_values}}</pre>
+                            {% else %}
+                            <div class='empty-data'>Sin datos anteriores</div>
+                            {% endif %}
+                        </td>
+                        <td class='data-cell'>
+                            {% if r.new_values %}
+                            <pre>{{r.new_values}}</pre>
+                            {% else %}
+                            <div class='empty-data'>Sin datos nuevos</div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

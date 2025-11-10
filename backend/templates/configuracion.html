@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración del Sistema</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(162, 155, 254, 0.2);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .config-form {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .config-section {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .config-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-description {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #a29bfe;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(162, 155, 254, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(162, 155, 254, 0.3);
+        }
+
+        .save-btn:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            color: #1565c0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .info-box-icon {
+            font-size: 1.2rem;
+            margin-right: 8px;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .config-preview {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .preview-title {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .preview-content {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 25px 20px;
+            }
+
+            .header h2 {
+                font-size: 2rem;
+            }
+
+            .config-form {
+                padding: 25px 20px;
+            }
+
+            .config-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .save-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h2>⚙️ Configuración</h2>
+            <p>Ajustes generales del sistema</p>
+        </div>
+
+        <div class='config-form'>
+            <div class='info-box'>
+                <span class='info-box-icon'>ℹ️</span>
+                <strong>Información:</strong> Los cambios realizados aquí afectarán el comportamiento general del sistema.
+            </div>
+
+            <form method='post'>
+                <div class='config-section'>
+                    <h3 class='section-title'>
+                        🏢 Información de la Empresa
+                    </h3>
+                    <p class='section-description'>
+                        Configure los datos básicos de su empresa que aparecerán en reportes y documentos generados por el sistema.
+                    </p>
+
+                    <div class='form-group'>
+                        <label class='form-label' for='company_name'>Nombre de la Empresa</label>
+                        <input 
+                            id='company_name'
+                            name='company_name' 
+                            class='form-input' 
+                            placeholder='Ingrese el nombre de su empresa'
+                            required
+                        >
+                    </div>
+
+                    <div class='config-preview'>
+                        <div class='preview-title'>Vista Previa</div>
+                        <div class='preview-content' id='preview-name'>Mi Empresa</div>
+                    </div>
+                </div>
+
+                <button type='submit' class='save-btn'>
+                    💾 Guardar Configuración
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Preview en tiempo real
+        document.getElementById('company_name').addEventListener('input', function(e) {
+            const preview = document.getElementById('preview-name');
+            preview.textContent = e.target.value || 'Mi Empresa';
+        });
+
+        // Animación del botón de guardar
+        document.querySelector('.save-btn').addEventListener('click', function(e) {
+            const btn = e.target;
+            const originalText = btn.textContent;
+            
+            btn.textContent = '⏳ Guardando...';
+            btn.style.background = '#95a5a6';
+            btn.disabled = true;
+            
+            // Simular delay de guardado (se removería en producción)
+            setTimeout(() => {
+                btn.textContent = '✅ Guardado';
+                btn.style.background = 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%)';
+                    btn.disabled = false;
+                }, 1500);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
