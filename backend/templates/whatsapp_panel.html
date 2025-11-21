@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel WhatsApp - Sistema de Pagos</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; min-height: 100vh; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        .header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white; padding: 30px; border-radius: 15px; margin-bottom: 30px;
+            text-align: center; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.2);
+        }
+        .header h1 { font-size: 2.5rem; font-weight: 300; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 1.1rem; }
+        
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px; margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white; padding: 25px; border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); text-align: center;
+            border-top: 4px solid #25D366;
+        }
+        .stat-number { font-size: 2.5rem; font-weight: 700; color: #25D366; }
+        .stat-label { color: #6c757d; font-size: 0.9rem; text-transform: uppercase; margin-top: 5px; }
+        
+        .actions-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px; margin-bottom: 30px;
+        }
+        .action-card {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); text-align: center;
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .action-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.12); }
+        .action-icon { font-size: 3rem; margin-bottom: 15px; }
+        .action-title { font-size: 1.3rem; font-weight: 600; color: #2c3e50; margin-bottom: 10px; }
+        .action-desc { color: #6c757d; font-size: 0.95rem; margin-bottom: 20px; }
+        
+        .btn {
+            display: inline-block; padding: 12px 24px; border-radius: 8px;
+            text-decoration: none; font-weight: 600; transition: all 0.3s ease;
+            border: none; cursor: pointer; font-size: 1rem;
+        }
+        .btn-primary { background: linear-gradient(135deg, #25D366, #128C7E); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,211,102,0.3); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        
+        .recent-messages {
+            background: white; border-radius: 12px; padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .recent-messages h3 { color: #2c3e50; margin-bottom: 20px; font-size: 1.4rem; }
+        
+        .message-list { list-style: none; }
+        .message-item {
+            display: flex; align-items: center; padding: 15px;
+            border-bottom: 1px solid #eee; gap: 15px;
+        }
+        .message-item:last-child { border-bottom: none; }
+        .message-status {
+            width: 12px; height: 12px; border-radius: 50%;
+        }
+        .status-sent { background: #25D366; }
+        .status-failed { background: #dc3545; }
+        .status-pending { background: #ffc107; }
+        .message-info { flex: 1; }
+        .message-client { font-weight: 600; color: #2c3e50; }
+        .message-type { color: #6c757d; font-size: 0.85rem; }
+        .message-time { color: #adb5bd; font-size: 0.8rem; }
+        
+        .nav-links {
+            display: flex; gap: 10px; flex-wrap: wrap;
+            justify-content: center; margin-bottom: 20px;
+        }
+        .nav-links a {
+            padding: 10px 20px; background: rgba(255,255,255,0.2);
+            color: white; text-decoration: none; border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover { background: rgba(255,255,255,0.3); }
+        
+        .session-status {
+            background: white; padding: 20px; border-radius: 12px;
+            margin-bottom: 20px; display: flex; align-items: center;
+            justify-content: space-between;
+        }
+        .session-indicator { display: flex; align-items: center; gap: 10px; }
+        .indicator-dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        .indicator-active { background: #25D366; }
+        .indicator-inactive { background: #dc3545; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .header h1 { font-size: 1.8rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .stat-number { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1>📱 Panel de WhatsApp</h1>
+            <p>Sistema de mensajería automatizada</p>
+            <div class='nav-links'>
+                <a href='/admin/panel'>🏠 Panel</a>
+                <a href='/whatsapp/send'>✉️ Enviar</a>
+                <a href='/whatsapp/history'>📋 Historial</a>
+                <a href='/whatsapp/templates'>📝 Plantillas</a>
+                <a href='/whatsapp/config'>⚙️ Config</a>
+            </div>
+        </div>
+        
+        <div class='session-status'>
+            <div class='session-indicator'>
+                <div class='indicator-dot indicator-inactive' id='sessionIndicator'></div>
+                <span id='sessionText'>Verificando sesión...</span>
+            </div>
+            <button class='btn btn-primary' onclick='initSession()'>🔄 Iniciar Sesión</button>
+        </div>
+        
+        <div class='stats-grid'>
+            <div class='stat-card'>
+                <div class='stat-number'>{{stats.sent}}</div>
+                <div class='stat-label'>Enviados (30 días)</div>
+            </div>
+            <div class='stat-card'>
+                <div class='stat-number'>{{stats.failed}}</div>
+                <div class='stat-label'>Fallidos</div>
+            </div>
+            <div class='stat-card'>
+                <div class='stat-number'>{{stats.success_rate}}%</div>
+                <div class='stat-label'>Tasa de éxito</div>
+            </div>
+            <div class='stat-card'>
+                <div class='stat-number'>{{clients_with_phone}}</div>
+                <div class='stat-label'>Clientes con WhatsApp</div>
+            </div>
+        </div>
+        
+        <div class='actions-grid'>
+            <div class='action-card' onclick="location.href='/whatsapp/send?action=single'">
+                <div class='action-icon'>✉️</div>
+                <div class='action-title'>Mensaje Individual</div>
+                <div class='action-desc'>Enviar mensaje a un cliente específico</div>
+                <span class='btn btn-primary'>Enviar</span>
+            </div>
+            
+            <div class='action-card'>
+                <div class='action-icon'>📅</div>
+                <div class='action-title'>Recordatorios Mensuales</div>
+                <div class='action-desc'>Enviar recordatorio a clientes con pago pendiente</div>
+                <form method='post' action='/whatsapp/send' style='display:inline'>
+                    <input type='hidden' name='action' value='monthly'>
+                    <button type='submit' class='btn btn-primary'>Ejecutar</button>
+                </form>
+            </div>
+            
+            <div class='action-card'>
+                <div class='action-icon'>⚠️</div>
+                <div class='action-title'>Aviso a Morosos</div>
+                <div class='action-desc'>Notificar a clientes con deudas pendientes</div>
+                <form method='post' action='/whatsapp/send' style='display:inline'>
+                    <input type='hidden' name='action' value='overdue'>
+                    <button type='submit' class='btn btn-warning'>Ejecutar</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class='recent-messages'>
+            <h3>📨 Mensajes Recientes</h3>
+            <ul class='message-list'>
+                {% for msg in recent_messages[:10] %}
+                <li class='message-item'>
+                    <div class='message-status status-{{msg.status}}'></div>
+                    <div class='message-info'>
+                        <div class='message-client'>{{msg.client_name}}</div>
+                        <div class='message-type'>{{msg.message_type}}</div>
+                    </div>
+                    <div class='message-time'>{{msg.sent_at or msg.created_at}}</div>
+                </li>
+                {% else %}
+                <li class='message-item'>
+                    <div class='message-info'>No hay mensajes recientes</div>
+                </li>
+                {% endfor %}
+            </ul>
+            <div style='text-align:center; margin-top:20px'>
+                <a href='/whatsapp/history' class='btn btn-secondary'>Ver todo el historial</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Verificar estado de sesión
+        async function checkSession() {
+            try {
+                const res = await fetch('/whatsapp/session/status');
+                const data = await res.json();
+                const indicator = document.getElementById('sessionIndicator');
+                const text = document.getElementById('sessionText');
+                
+                if (data.session_exists) {
+                    indicator.className = 'indicator-dot indicator-active';
+                    text.textContent = 'Sesión configurada';
+                } else {
+                    indicator.className = 'indicator-dot indicator-inactive';
+                    text.textContent = 'Sesión no configurada';
+                }
+            } catch(e) {
+                console.error('Error verificando sesión:', e);
+            }
+        }
+        
+        async function initSession() {
+            if(confirm('Esto abrirá WhatsApp Web para escanear el código QR. ¿Continuar?')) {
+                try {
+                    const res = await fetch('/whatsapp/session/init', {method: 'POST'});
+                    const data = await res.json();
+                    alert(data.message || data.error);
+                } catch(e) {
+                    alert('Error: ' + e.message);
+                }
+            }
+        }
+        
+        // Verificar al cargar
+        checkSession();
+        // Verificar cada 30 segundos
+        setInterval(checkSession, 30000);
+    </script>
+</body>
+</html>

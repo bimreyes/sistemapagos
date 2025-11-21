@@ -11,15 +11,34 @@ def login_required(f):
             return redirect(url_for('auth.login'))
         return f(*args, **kwargs)
     return wrapper
+# En backend/app/blueprints/admin.py
 @bp.route('/panel')
 @login_required
 def panel():
     db = get_db()
+    
+    # Clientes totales
     cur = db.execute('SELECT COUNT(*) as c FROM clients')
     clients = cur.fetchone()['c']
+    
+    # Pagos pendientes
     cur = db.execute("SELECT COUNT(*) as c FROM payments WHERE status='pending'")
     pending = cur.fetchone()['c']
-    return render_template('panel.html', clients=clients, pending=pending)
+    
+    # Pagos completados
+    cur = db.execute("SELECT COUNT(*) as c FROM payments WHERE status='paid'")
+    completed = cur.fetchone()['c']
+    
+    # Total recaudado
+    cur = db.execute("SELECT SUM(amount) as total FROM payments WHERE status='paid'")
+    revenue_row = cur.fetchone()
+    revenue = revenue_row['total'] if revenue_row['total'] else 0
+    
+    return render_template('panel.html', 
+                         clients=clients, 
+                         pending=pending,
+                         completed=completed,
+                         revenue=revenue)
 @bp.route('/usuarios', methods=['GET','POST'])
 @login_required
 def usuarios():

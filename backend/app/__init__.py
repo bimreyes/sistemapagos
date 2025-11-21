@@ -28,6 +28,8 @@ def create_app():
     from .blueprints.reports import bp as reports_bp
     from .blueprints.api import bp as api_bp
     from .blueprints.whatsapp import bp as whatsapp_bp
+    from .blueprints.payment_plans import bp as payment_plans_bp
+
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(clients_bp)
@@ -37,7 +39,8 @@ def create_app():
     app.register_blueprint(reports_bp)
     app.register_blueprint(api_bp, url_prefix='/api')
     app.register_blueprint(whatsapp_bp)
-
+    app.register_blueprint(payment_plans_bp)
+    
     @app.route('/')
     def index():
         return render_template('login.html')

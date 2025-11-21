@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, current_app, send_file
+from flask import Blueprint, render_template, request, redirect, url_for, session, current_app, send_file, jsonify
 from ..db import get_db
 from datetime import datetime
 import csv, io, os
@@ -13,6 +13,59 @@ def login_required(f):
             return redirect(url_for('auth.login'))
         return f(*args, **kwargs)
     return wrapper
+
+# NUEVA RUTA: Vista consolidada de todos los clientes con 12 meses
+@bp.route('/consolidada')
+@login_required
+def consolidada():
+    year = int(request.args.get('year', datetime.now().year))
+    db = get_db()
+    
+    # Obtener todos los clientes activos
+    cur = db.execute('SELECT * FROM clients WHERE active=1 ORDER BY name')
+    clients = cur.fetchall()
+    
+    # Para cada cliente, obtener sus 12 meses de pagos
+    clients_data = []
+    for client in clients:
+        client_dict = dict(client)
+        
+        # Obtener pagos de los 12 meses
+        payments_dict = {}
+        cur = db.execute('SELECT * FROM payments WHERE client_id=? AND year=? ORDER BY month', (client['id'], year))
+        payments = cur.fetchall()
+        
+        for payment in payments:
+            payments_dict[payment['month']] = {
+                'id': payment['id'],
+                'amount': payment['amount'],
+                'status': payment['status'],
+                'paid_date': payment['paid_date']
+            }
+        
+        # Asegurar que existen los 12 meses (crear si no existen)
+        for month in range(1, 13):
+            if month not in payments_dict:
+                # Crear pago pendiente con monto del cliente
+                cur = db.execute(
+                    'INSERT INTO payments(client_id, year, month, amount, status) VALUES (?, ?, ?, ?, ?)',
+                    (client['id'], year, month, client['monthly_amount'], 'pending')
+                )
+                db.commit()
+                payment_id = cur.lastrowid
+                
+                payments_dict[month] = {
+                    'id': payment_id,
+                    'amount': client['monthly_amount'],
+                    'status': 'pending',
+                    'paid_date': None
+                }
+        
+        client_dict['payments'] = payments_dict
+        clients_data.append(client_dict)
+    
+    return render_template('pagos_consolidada.html', clients=clients_data, year=year)
+
 @bp.route('/client/<int:client_id>')
 @login_required
 def client_payments(client_id):
@@ -32,6 +85,39 @@ def mark_paid(payment_id):
     db.execute('UPDATE payments SET status=?, paid_date=?, payment_type=? WHERE id=?', ('paid', datetime.now().strftime('%Y-%m-%d %H:%M:%S'), request.form.get('payment_type','manual'), payment_id))
     db.commit()
     return ('',204)
+
+# FUNCIÓN: Editar monto de un pago específico
+@bp.route('/edit_amount/<int:payment_id>', methods=['POST'])
+@login_required
+def edit_amount(payment_id):
+    try:
+        new_amount = float(request.form.get('amount', 0))
+        if new_amount < 0:
+            return jsonify({'error': 'El monto no puede ser negativo'}), 400
+        
+        db = get_db()
+        db.execute('UPDATE payments SET amount=? WHERE id=?', (new_amount, payment_id))
+        db.commit()
+        return jsonify({'success': True, 'new_amount': new_amount}), 200
+    except ValueError:
+        return jsonify({'error': 'Monto inválido'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# NUEVA FUNCIÓN: Marcar como pagado desde vista consolidada (retorna JSON)
+@bp.route('/mark_paid_json/<int:payment_id>', methods=['POST'])
+@login_required
+def mark_paid_json(payment_id):
+    try:
+        db = get_db()
+        paid_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        db.execute('UPDATE payments SET status=?, paid_date=?, payment_type=? WHERE id=?', 
+                   ('paid', paid_date, request.form.get('payment_type','manual'), payment_id))
+        db.commit()
+        return jsonify({'success': True, 'paid_date': paid_date}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @bp.route('/morosos')
 @login_required
 def morosos():

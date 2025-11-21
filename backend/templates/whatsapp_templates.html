@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plantillas de Mensaje - WhatsApp</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        .header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white; padding: 25px; border-radius: 15px; margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h2 { font-size: 2rem; font-weight: 300; }
+        
+        .back-link {
+            display: inline-block; margin-bottom: 20px; color: #25D366;
+            text-decoration: none; font-weight: 600;
+        }
+        
+        .templates-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .template-card {
+            background: white; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: all 0.3s ease;
+        }
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+        
+        .template-header {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white; padding: 15px 20px;
+        }
+        .template-name {
+            font-size: 1.1rem; font-weight: 600;
+            text-transform: capitalize;
+        }
+        
+        .template-body { padding: 20px; }
+        
+        .template-preview {
+            background: #dcf8c6; padding: 15px; border-radius: 10px;
+            font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap;
+            max-height: 250px; overflow-y: auto;
+        }
+        
+        .template-vars {
+            margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;
+        }
+        .vars-title {
+            font-size: 0.85rem; color: #6c757d; margin-bottom: 10px;
+        }
+        .var-tag {
+            display: inline-block; padding: 4px 10px; background: #e9ecef;
+            border-radius: 15px; font-size: 0.8rem; margin: 3px;
+            color: #495057;
+        }
+        
+        .template-actions {
+            padding: 15px 20px; border-top: 1px solid #eee;
+            display: flex; gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px; border-radius: 8px; border: none;
+            cursor: pointer; font-weight: 600; font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .btn-copy { background: #25D366; color: white; flex: 1; }
+        .btn-copy:hover { background: #128C7E; }
+        .btn-use { background: #e9ecef; color: #495057; }
+        .btn-use:hover { background: #dee2e6; }
+        
+        .info-box {
+            background: #e8f5e9; border: 1px solid #c8e6c9;
+            color: #2e7d32; padding: 20px; border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        .info-box h4 { margin-bottom: 10px; }
+        
+        @media (max-width: 768px) {
+            .templates-grid { grid-template-columns: 1fr; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <a href='/whatsapp/panel' class='back-link'>← Volver al Panel</a>
+        
+        <div class='header'>
+            <h2>📝 Plantillas de Mensaje</h2>
+            <p>Mensajes predefinidos para diferentes situaciones</p>
+        </div>
+        
+        <div class='info-box'>
+            <h4>ℹ️ Variables disponibles</h4>
+            <p>Las plantillas usan variables que se reemplazan automáticamente:</p>
+            <p><code>{name}</code> = Nombre del cliente | <code>{amount}</code> = Monto | 
+               <code>{month}</code> = Mes | <code>{year}</code> = Año | 
+               <code>{pending_count}</code> = Pagos pendientes | <code>{total_debt}</code> = Deuda total</p>
+        </div>
+        
+        <div class='templates-grid'>
+            {% for template in templates %}
+            <div class='template-card'>
+                <div class='template-header'>
+                    <div class='template-name'>
+                        {% if 'recordatorio' in template.name %}📅{% endif %}
+                        {% if 'vencido' in template.name or 'overdue' in template.name %}⚠️{% endif %}
+                        {% if 'bienvenida' in template.name %}👋{% endif %}
+                        {% if 'confirmacion' in template.name %}✅{% endif %}
+                        {% if 'resumen' in template.name %}📊{% endif %}
+                        {{template.name | replace('_', ' ')}}
+                    </div>
+                </div>
+                
+                <div class='template-body'>
+                    <div class='template-preview'>{{template.content}}</div>
+                    
+                    <div class='template-vars'>
+                        <div class='vars-title'>Variables utilizadas:</div>
+                        {% if '{name}' in template.content %}
+                        <span class='var-tag'>{name}</span>
+                        {% endif %}
+                        {% if '{amount}' in template.content %}
+                        <span class='var-tag'>{amount}</span>
+                        {% endif %}
+                        {% if '{month}' in template.content %}
+                        <span class='var-tag'>{month}</span>
+                        {% endif %}
+                        {% if '{pending_count}' in template.content %}
+                        <span class='var-tag'>{pending_count}</span>
+                        {% endif %}
+                        {% if '{total_debt}' in template.content %}
+                        <span class='var-tag'>{total_debt}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class='template-actions'>
+                    <button class='btn btn-copy' onclick='copyTemplate(this)' 
+                        data-content='{{template.content | e}}'>
+                        📋 Copiar
+                    </button>
+                    <a href='/whatsapp/send' class='btn btn-use'>✉️ Usar</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <script>
+        function copyTemplate(btn) {
+            const content = btn.dataset.content;
+            navigator.clipboard.writeText(content).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copiado!';
+                btn.style.background = '#128C7E';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#25D366';
+                }, 2000);
+            }).catch(err => {
+                alert('Error al copiar: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>

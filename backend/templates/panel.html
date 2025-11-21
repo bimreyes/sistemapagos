@@ -18,7 +18,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -76,25 +76,31 @@
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .cards {
+        nav a.featured {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            font-size: 1rem;
+            padding: 14px 24px;
+        }
+
+        nav a.featured:hover {
+            box-shadow: 0 8px 20px rgba(0, 184, 148, 0.3);
+        }
+
+        /* --- Tarjetas de estadísticas --- */
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
+            margin-bottom: 30px;
             animation: fadeInUp 0.8s ease-out 0.2s both;
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .card {
+        .stat-card {
             background: white;
             border-radius: 15px;
             padding: 30px;
@@ -106,23 +112,21 @@
             overflow: hidden;
         }
 
-        .card::before {
+        .stat-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 4px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        .card:hover {
+        .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             border-color: #667eea;
         }
 
-        .card h3 {
+        .stat-card h3 {
             color: #2c3e50;
             font-size: 1.3rem;
             font-weight: 600;
@@ -131,7 +135,7 @@
             letter-spacing: 1px;
         }
 
-        .card p {
+        .stat-card p {
             font-size: 3rem;
             font-weight: 700;
             color: #667eea;
@@ -152,60 +156,158 @@
             color: white;
         }
 
+        /* --- Acciones rápidas --- */
+        .quick-actions {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .quick-actions h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .action-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .action-item:hover {
+            background: white;
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-item a {
+            text-decoration: none;
+            color: #2c3e50;
+            display: block;
+        }
+
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .action-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .action-desc {
+            font-size: 0.9rem;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            nav {
-                justify-content: center;
-            }
-
-            nav a {
-                padding: 10px 15px;
-                font-size: 0.8rem;
-            }
-
-            .card {
-                padding: 20px;
-            }
-
-            .card p {
-                font-size: 2.5rem;
-            }
+            .container { padding: 15px; }
+            h1 { font-size: 2rem; }
+            nav a { padding: 10px 15px; font-size: 0.8rem; }
+            .stat-card p { font-size: 2.5rem; }
+            .actions-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class='container'>
         <header>
-            <h1>Panel de Control</h1>
+            <h1>🎯 Panel de Control</h1>
             <nav>
                 <a href='/clients/'>👥 Clientes</a>
+                <a href='/payments/consolidada' class='featured'>📊 Vista Consolidada</a>
                 <a href='/payments/morosos'>⚠️ Morosos</a>
-                <a href='/reports/global'>📊 Reportes</a>
+                <a href='/reports/global'>📈 Reportes</a>
                 <a href='/admin/historial'>📋 Historial</a>
+                <a href='/admin/usuarios'>👤 Usuarios</a>
+                <a href='/admin/backup'>💾 Backup</a>
                 <a href='/auth/logout'>🚪 Salir</a>
+                <a href='/payment-plans/panel'>💰 Planes de Pago</a>
             </nav>
         </header>
 
-        <section class='cards'>
-            <div class='card'>
+        <!-- Estadísticas -->
+        <section class='stats-grid'>
+            <div class='stat-card'>
                 <div class='card-icon'>👥</div>
                 <h3>Total Clientes</h3>
-                <p>{{clients}}</p>
+                <p id='total-clients'>{{clients}}</p>
             </div>
-            
-            <div class='card'>
+            <div class='stat-card'>
                 <div class='card-icon'>⏰</div>
                 <h3>Pagos Pendientes</h3>
-                <p>{{pending}}</p>
+                <p id='pending-payments'>{{pending}}</p>
+            </div>
+            <div class='stat-card'>
+                <div class='card-icon'>✅</div>
+                <h3>Pagos Completados</h3>
+                <p id='completed-payments'>{{completed}}</p>
+            </div>
+        </section>
+
+        <!-- Acciones rápidas -->
+        <section class='quick-actions'>
+            <h2>⚡ Acciones Rápidas</h2>
+            <div class='actions-grid'>
+                <div class='action-item'><a href='/clients/add'><div class='action-icon'>➕</div><div class='action-title'>Agregar Cliente</div><div class='action-desc'>Registrar un nuevo cliente</div></a></div>
+                <div class='action-item'><a href='/clients/'><div class='action-icon'>📋</div><div class='action-title'>Ver Clientes</div><div class='action-desc'>Lista completa de clientes</div></a></div>
+                <div class='action-item'><a href='/payments/morosos'><div class='action-icon'>⚠️</div><div class='action-title'>Clientes Morosos</div><div class='action-desc'>Revisar pagos pendientes</div></a></div>
+                <div class='action-item'><a href='/reports/global'><div class='action-icon'>📊</div><div class='action-title'>Reportes Globales</div><div class='action-desc'>Estadísticas del sistema</div></a></div>
+                <div class='action-item'><a href='/admin/historial'><div class='action-icon'>📜</div><div class='action-title'>Historial</div><div class='action-desc'>Auditoría de cambios</div></a></div>
+                <div class='action-item'><a href='/admin/usuarios'><div class='action-icon'>👤</div><div class='action-title'>Usuarios</div><div class='action-desc'>Administrar administradores</div></a></div>
+                <div class='action-item'><a href='/admin/backup'><div class='action-icon'>💾</div><div class='action-title'>Backup</div><div class='action-desc'>Descargar copia de seguridad</div></a></div>
+                <div class='action-item'><a href='/api/clients'><div class='action-icon'>🔌</div><div class='action-title'>API REST</div><div class='action-desc'>Acceso mediante API</div></a></div>
             </div>
         </section>
     </div>
+
+    <script>
+        // Animar valores de estadísticas
+        function animateValue(id, start, end, duration) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                el.textContent = Math.floor(current);
+            }, 16);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const stats = {
+                clients: {{clients|default(0)}},
+                pending: {{pending|default(0)}},
+                completed: {{completed|default(0)}}
+            };
+            animateValue('total-clients', 0, stats.clients, 1000);
+            animateValue('pending-payments', 0, stats.pending, 1000);
+            animateValue('completed-payments', 0, stats.completed, 1000);
+        });
+    </script>
 </body>
 </html>

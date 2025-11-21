@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos Consolidada - Sistema WhatsApp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 30px 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.2);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .whatsapp-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 300;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #25D366;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .filters-section {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-input {
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: #25D366;
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #25D366;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            max-height: 70vh;
+        }
+
+        .payments-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .payments-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .payments-table th {
+            padding: 18px 15px;
+            text-align: left;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .payments-table th.client-column {
+            min-width: 200px;
+            position: sticky;
+            left: 0;
+            z-index: 101;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .payments-table th.month-column {
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .payments-table th.actions-column {
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .payments-table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .payments-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .payments-table td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+
+        .payments-table td.client-column {
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 10;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .payments-table tbody tr:hover td.client-column {
+            background: #f8f9fa;
+        }
+
+        .client-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .client-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .client-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .client-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+
+        .client-phone {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .payment-cell {
+            text-align: center;
+        }
+
+        .payment-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 90px;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .status-paid {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .status-paid:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.3);
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+        }
+
+        .status-pending:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(253, 203, 110, 0.3);
+        }
+
+        .payment-amount {
+            font-size: 0.75rem;
+            font-weight: 700;
+            opacity: 0.9;
+        }
+
+        .empty-cell {
+            color: #dee2e6;
+            font-weight: 700;
+        }
+
+        .actions-cell {
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-details {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+
+        .btn-details:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(116, 185, 255, 0.3);
+        }
+
+        .total-row {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-weight: 700;
+            border-top: 3px solid #667eea;
+            position: sticky;
+            bottom: 0;
+        }
+
+        .total-row td {
+            padding: 20px 15px;
+        }
+
+        .total-label {
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        .total-amount {
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #6c757d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-btn:hover {
+            background: #f8f9fa;
+            color: #2c3e50;
+            transform: rotate(90deg);
+        }
+
+        .message-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #25D366;
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .message-preview {
+            background: linear-gradient(135deg, #E5DDD5 0%, #D1CBC4 100%);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .message-bubble {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .preview-text {
+            color: #2c3e50;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .template-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .template-btn {
+            padding: 10px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .template-btn:hover {
+            border-color: #25D366;
+            background: #f0fdf4;
+            transform: translateY(-2px);
+        }
+
+        .template-btn.active {
+            border-color: #25D366;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+        }
+
+        .btn-send {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-send:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #6c757d;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #25D366;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .table-wrapper {
+                max-height: 60vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal-content {
+                padding: 25px;
+                width: 95%;
+            }
+
+            .template-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-title">
+                    <div class="whatsapp-icon">📱</div>
+                    <h1>Pagos Consolidada - WhatsApp</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="sendBulkReminders()">
+                        📨 Recordatorios Masivos
+                    </button>
+                    <a href="/admin/panel" class="btn btn-secondary">
+                        🏠 Panel
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">🔍 Buscar Cliente</label>
+                    <input type="text" class="filter-input" id="searchClient" placeholder="Nombre o teléfono..." onkeyup="filterTable()">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">📅 Año</label>
+                    <select class="filter-input" id="yearFilter" onchange="loadData()">
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025" selected>2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">👥 Mostrar Clientes</label>
+                    <select class="filter-input" id="showFilter" onchange="filterTable()">
+                        <option value="all">Todos los clientes</option>
+                        <option value="active">Solo activos</option>
+                        <option value="inactive">Solo inactivos</option>
+                        <option value="debtors">Solo con deuda</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalClients">0</div>
+                    <div class="stat-label">Clientes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalPaid">0</div>
+                    <div class="stat-label">Pagos Realizados</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalPending">0</div>
+                    <div class="stat-label">Pagos Pendientes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalAmount">$0</div>
+                    <div class="stat-label">Total Cobrado</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="pendingAmount">$0</div>
+                    <div class="stat-label">Por Cobrar</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <div class="table-wrapper">
+                <table class="payments-table" id="paymentsTable">
+                    <thead>
+                        <tr id="tableHeader">
+                            <th class="client-column">👤 Cliente</th>
+                            <!-- Meses se generan dinámicamente -->
+                            <th class="actions-column">⚡ Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="14" class="loading">
+                                <div class="loading-spinner"></div>
+                                <div>Cargando datos...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot id="tableFoot">
+                        <!-- Totales se generan dinámicamente -->
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal WhatsApp -->
+    <div class="modal" id="whatsappModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">💬 Enviar WhatsApp</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <form class="message-form" onsubmit="sendWhatsAppMessage(event)">
+                <div class="form-group">
+                    <label class="form-label">👤 Cliente</label>
+                    <input type="text" class="form-input" id="clientName" readonly>
+                    <input type="hidden" id="clientId">
+                    <input type="hidden" id="clientPhone">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📋 Plantilla</label>
+                    <div class="template-buttons">
+                        <button type="button" class="template-btn" onclick="selectTemplate('recordatorio')">
+                            ⏰ Recordatorio
+                        </button>
+                        <button type="button" class="template-btn" onclick="selectTemplate('vencido')">
+                            ⚠️ Vencido
+                        </button>
+                        <button type="button" class="template-btn" onclick="selectTemplate('agradecimiento')">
+                            ✅ Gracias
+                        </button>
+                        <button type="button" class="template-btn" onclick="selectTemplate('estado')">
+                            📊 Estado
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">✉️ Mensaje</label>
+                    <textarea 
+                        class="form-textarea" 
+                        id="messageText" 
+                        placeholder="Escribe tu mensaje aquí..."
+                        oninput="updatePreview()"
+                        required
+                    ></textarea>
+                    <small style="color: #6c757d;">Variables: {nombre}, {monto}, {mes}</small>
+                </div>
+
+                <div class="message-preview">
+                    <div class="preview-label">📱 Vista Previa</div>
+                    <div class="message-bubble">
+                        <div class="preview-text" id="previewText">
+                            El mensaje aparecerá aquí...
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-send" id="sendBtn">
+                    📤 Enviar por WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let clientsData = {};
+        let paymentsData = {};
+        const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                           'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const messageTemplates = {
+            recordatorio: `
+        Hola {nombre}, 👋
+
+        Este es un recordatorio de tu pago pendiente:
+        🪙 Monto: ${currency}{monto}
+        📅 Mes: {mes}
+
+        Por favor, realiza tu pago a la brevedad.
+        ¡Gracias!
+        `,
+
+            vencido: `
+        Hola {nombre}, ⚠️
+
+        Tienes un pago vencido:
+        🪙 Monto: ${currency}{monto}
+        📅 Mes: {mes}
+
+        Por favor, ponte al día antes posible.
+        `,
+            
+            agradecimiento: `
+        Hola {nombre}, 🟢
+
+        ¡Recibimos tu pago!
+        🪙 Monto: ${currency}{monto}
+        📅 Mes: {mes}
+
+        Muchas gracias por tu puntualidad.
+        `,
+
+            estado: `
+        Hola {nombre}, 📘
+
+        Estado de tu cuenta:
+        💰 Total pendiente: ${currency}{monto}
+
+        Si necesitas información, contáctanos.
+        ¡Gracias!
+        `
+        };
+
+        const currency = '$';
+
+        // Cargar datos al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+        });
+
+        // Función principal para cargar datos
+        async function loadData() {
+            try {
+                const year = document.getElementById('yearFilter').value;
+                
+                console.log(`📊 Cargando datos para el año ${year}...`);
+                
+                // Cargar clientes desde la API
+                const clientsResponse = await fetch('/api/clients');
+                const clients = await clientsResponse.json();
+                
+                console.log(`✅ Clientes obtenidos: ${clients.length}`);
+                
+                // Crear objeto de clientes
+                clientsData = {};
+                paymentsData = {}; // Limpiar datos anteriores
+                
+                for (let client of clients) {
+                    // CAMBIO: Mostrar TODOS los clientes (activos e inactivos)
+                    clientsData[client.id] = client;
+                    
+                    // Cargar pagos del cliente
+                    const paymentsResponse = await fetch(`/api/client/${client.id}/payments`);
+                    const payments = await paymentsResponse.json();
+                    
+                    console.log(`  Cliente "${client.name}": ${payments.length} pagos totales`);
+                    
+                    // Organizar pagos por año y mes
+                    if (!paymentsData[client.id]) {
+                        paymentsData[client.id] = {};
+                    }
+                    
+                    let paymentsInYear = 0;
+                    for (let payment of payments) {
+                        if (payment.year == year) {
+                            paymentsData[client.id][payment.month] = payment;
+                            paymentsInYear++;
+                        }
+                    }
+                    
+                    console.log(`    → ${paymentsInYear} pagos en el año ${year}`);
+                    
+                    // Si el cliente no tiene pagos para este año, generar estructura vacía
+                    if (paymentsInYear === 0) {
+                        console.log(`    ⚠️ Cliente sin pagos en ${year}, verificar si debe tenerlos`);
+                    }
+                }
+                
+                console.log(`✅ Total clientes procesados: ${Object.keys(clientsData).length}`);
+                
+                renderTable(year);
+                updateStats();
+                
+            } catch (error) {
+                console.error('❌ Error cargando datos:', error);
+                showNotification('❌ Error cargando datos', 'error');
+            }
+        }
+
+        // Renderizar tabla
+        function renderTable(year) {
+            const header = document.getElementById('tableHeader');
+            const tbody = document.getElementById('tableBody');
+            const tfoot = document.getElementById('tableFoot');
+            
+            // Limpiar tabla
+            header.innerHTML = '<th class="client-column">👤 Cliente</th>';
+            tbody.innerHTML = '';
+            tfoot.innerHTML = '';
+            
+            // Agregar columnas de meses
+            for (let month = 1; month <= 12; month++) {
+                const th = document.createElement('th');
+                th.className = 'month-column';
+                th.textContent = monthNames[month - 1];
+                header.appendChild(th);
+            }
+            
+            // Agregar columna de acciones
+            const thActions = document.createElement('th');
+            thActions.className = 'actions-column';
+            thActions.textContent = '⚡ Acciones';
+            header.appendChild(thActions);
+            
+            // Totales por mes
+            const monthTotals = Array(12).fill(0);
+            
+            // Crear filas de clientes
+            for (let clientId in clientsData) {
+                const client = clientsData[clientId];
+                const tr = document.createElement('tr');
+                tr.setAttribute('data-client-id', clientId);
+                
+                // Columna de cliente
+                const tdClient = document.createElement('td');
+                tdClient.className = 'client-column';
+                tdClient.innerHTML = `
+                    <div class="client-info">
+                        <div class="client-avatar">${client.name.charAt(0).toUpperCase()}</div>
+                        <div class="client-details">
+                            <div class="client-name">${client.name}</div>
+                            <div class="client-phone">📞 ${client.phone || 'Sin teléfono'}</div>
+                        </div>
+                    </div>
+                `;
+                tr.appendChild(tdClient);
+                
+                // Columnas de meses
+                for (let month = 1; month <= 12; month++) {
+                    const tdPayment = document.createElement('td');
+                    tdPayment.className = 'payment-cell';
+                    
+                    const payment = paymentsData[clientId] && paymentsData[clientId][month];
+                    
+                    if (payment) {
+                        const statusClass = payment.status === 'paid' ? 'status-paid' : 'status-pending';
+                        const statusIcon = payment.status === 'paid' ? '✓' : '⏳';
+                        const statusText = payment.status === 'paid' ? 'Pagado' : 'Pendiente';
+                        
+                        tdPayment.innerHTML = `
+                            <div class="payment-status ${statusClass}" 
+                                 onclick="togglePayment(${payment.id}, ${clientId}, ${month})"
+                                 title="Click para cambiar estado">
+                                ${statusIcon} ${statusText}
+                                <div class="payment-amount">${payment.amount.toFixed(2)}</div>
+                            </div>
+                        `;
+                        
+                        monthTotals[month - 1] += payment.amount;
+                    } else {
+                        tdPayment.innerHTML = '<span class="empty-cell">-</span>';
+                    }
+                    
+                    tr.appendChild(tdPayment);
+                }
+                
+                // Columna de acciones
+                const tdActions = document.createElement('td');
+                tdActions.className = 'actions-cell';
+                tdActions.innerHTML = `
+                    <div class="action-buttons">
+                        <button class="btn-action btn-whatsapp" onclick="openWhatsAppModal(${clientId})">
+                            💬 WhatsApp
+                        </button>
+                        <button class="btn-action btn-details" onclick="viewDetails(${clientId})">
+                            👁️ Ver
+                        </button>
+                    </div>
+                `;
+                tr.appendChild(tdActions);
+                
+                tbody.appendChild(tr);
+            }
+            
+            // Fila de totales
+            const trTotal = document.createElement('tr');
+            trTotal.className = 'total-row';
+            
+            const tdTotalLabel = document.createElement('td');
+            tdTotalLabel.className = 'total-label';
+            tdTotalLabel.textContent = '💰 TOTALES';
+            trTotal.appendChild(tdTotalLabel);
+            
+            for (let i = 0; i < 12; i++) {
+                const tdTotal = document.createElement('td');
+                tdTotal.className = 'payment-cell';
+                tdTotal.innerHTML = `<strong class="total-amount">${monthTotals[i].toFixed(2)}</strong>`;
+                trTotal.appendChild(tdTotal);
+            }
+            
+            const tdTotalActions = document.createElement('td');
+            trTotal.appendChild(tdTotalActions);
+            
+            tfoot.appendChild(trTotal);
+        }
+
+        // Cambiar estado de pago
+        async function togglePayment(paymentId, clientId, month) {
+            try {
+                const payment = paymentsData[clientId][month];
+                const newStatus = payment.status === 'paid' ? 'pending' : 'paid';
+                
+                // Actualizar en el servidor
+                const response = await fetch(`/payments/mark_paid/${paymentId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `payment_type=manual`
+                });
+                
+                if (response.ok) {
+                    // Actualizar localmente
+                    payment.status = newStatus;
+                    
+                    // Recargar datos para reflejar cambios
+                    await loadData();
+                    
+                    const message = newStatus === 'paid' ? 
+                        '✅ Pago marcado como pagado' : 
+                        '⏳ Pago marcado como pendiente';
+                    showNotification(message, 'success');
+                } else {
+                    showNotification('❌ Error al actualizar el pago', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error al cambiar estado:', error);
+                showNotification('❌ Error al actualizar el pago', 'error');
+            }
+        }
+
+        // Filtrar tabla
+        function filterTable() {
+            const searchTerm = document.getElementById('searchClient').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const rows = document.querySelectorAll('#tableBody tr');
+
+            rows.forEach(row => {
+                const clientName = row.querySelector('.client-name')?.textContent.toLowerCase() || '';
+                const clientPhone = row.querySelector('.client-phone')?.textContent.toLowerCase() || '';
+                const matchesSearch = clientName.includes(searchTerm) || clientPhone.includes(searchTerm);
+
+                let matchesStatus = true;
+                if (statusFilter !== 'all') {
+                    const statuses = Array.from(row.querySelectorAll('.payment-status'));
+                    matchesStatus = statuses.some(status => 
+                        status.classList.contains(`status-${statusFilter}`)
+                    );
+                }
+
+                row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+            });
+
+            updateStats();
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            const rows = Array.from(document.querySelectorAll('#tableBody tr')).filter(row => 
+                row.style.display !== 'none'
+            );
+
+            let totalPaid = 0;
+            let totalPending = 0;
+            let paidAmount = 0;
+            let pendingAmount = 0;
+
+            rows.forEach(row => {
+                const payments = row.querySelectorAll('.payment-status');
+                payments.forEach(payment => {
+
+                    // Obtener el texto del monto y limpiarlo
+                    const raw = payment.querySelector('.payment-amount')?.textContent || '0';
+
+                    // Limpieza total: eliminar S/ , soles, comas, espacios y cualquier cosa que no sea número o punto
+                    const clean = raw.replace(/[^0-9.]/g, '');
+
+                    // Convertir a número o 0
+                    const amount = parseFloat(clean) || 0;
+
+                    if (payment.classList.contains('status-paid')) {
+                        totalPaid++;
+                        paidAmount += amount;
+                    } else if (payment.classList.contains('status-pending')) {
+                        totalPending++;
+                        pendingAmount += amount;
+                    }
+                });
+            });
+
+            document.getElementById('totalClients').textContent = rows.length;
+            document.getElementById('totalPaid').textContent = totalPaid;
+            document.getElementById('totalPending').textContent = totalPending;
+            document.getElementById('totalAmount').textContent = `${paidAmount.toFixed(2)}`;
+            document.getElementById('pendingAmount').textContent = `${pendingAmount.toFixed(2)}`;
+        }
+
+        // Abrir modal de WhatsApp
+        function openWhatsAppModal(clientId) {
+            const client = clientsData[clientId];
+            if (!client) {
+                showNotification('❌ Cliente no encontrado', 'error');
+                return;
+            }
+
+            document.getElementById('clientId').value = clientId;
+            document.getElementById('clientName').value = client.name;
+            document.getElementById('clientPhone').value = client.phone || '';
+            document.getElementById('messageText').value = '';
+            document.getElementById('previewText').textContent = 'El mensaje aparecerá aquí...';
+            
+            // Limpiar selección de plantillas
+            document.querySelectorAll('.template-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById('whatsappModal').classList.add('active');
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            document.getElementById('whatsappModal').classList.remove('active');
+        }
+
+        // Seleccionar plantilla
+        function selectTemplate(templateType) {
+            // Actualizar botones activos
+            document.querySelectorAll('.template-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            const clientId = document.getElementById('clientId').value;
+            const client = clientsData[clientId];
+            const template = messageTemplates[templateType];
+
+            // Obtener primer pago pendiente
+            let pendingMonth = null;
+            let pendingAmount = 0;
+            
+            const payments = paymentsData[clientId] || {};
+            for (let month in payments) {
+                if (payments[month].status === 'pending') {
+                    pendingMonth = parseInt(month);
+                    pendingAmount = payments[month].amount;
+                    break;
+                }
+            }
+
+            const message = template
+                .replace(/{nombre}/g, client.name)
+                .replace(/{monto}/g, pendingAmount.toFixed(2))
+                .replace(/{mes}/g, pendingMonth ? monthNames[pendingMonth - 1] : 'N/A');
+
+            document.getElementById('messageText').value = message;
+            updatePreview();
+        }
+
+        // Actualizar vista previa
+        function updatePreview() {
+            const message = document.getElementById('messageText').value;
+            const clientId = document.getElementById('clientId').value;
+            const client = clientsData[clientId];
+
+            if (!client) {
+                document.getElementById('previewText').textContent = 'El mensaje aparecerá aquí...';
+                return;
+            }
+
+            // Obtener primer pago pendiente para variables
+            let pendingAmount = 0;
+            let pendingMonth = 'N/A';
+            
+            const payments = paymentsData[clientId] || {};
+            for (let month in payments) {
+                if (payments[month].status === 'pending') {
+                    pendingAmount = payments[month].amount;
+                    pendingMonth = monthNames[parseInt(month) - 1];
+                    break;
+                }
+            }
+
+            let preview = message
+                .replace(/{nombre}/g, client.name)
+                .replace(/{monto}/g, pendingAmount.toFixed(2))
+                .replace(/{mes}/g, pendingMonth);
+
+            document.getElementById('previewText').textContent = preview || 'El mensaje aparecerá aquí...';
+        }
+
+        // Enviar mensaje por WhatsApp
+        async function sendWhatsAppMessage(event) {
+            event.preventDefault();
+
+            const clientId = document.getElementById('clientId').value;
+            const client = clientsData[clientId];
+            const message = document.getElementById('messageText').value;
+            
+            if (!client.phone) {
+                showNotification('❌ El cliente no tiene teléfono registrado', 'error');
+                return;
+            }
+
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = '📤 Enviando...';
+
+            try {
+                const response = await fetch('/whatsapp/enqueue', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        client_id: clientId,
+                        message: message,
+                        template: null,
+                        attachment: null,
+                        scheduled_at: null
+                    })
+                });
+
+                if (response.ok) {
+                    showNotification(`✅ Mensaje enviado a ${client.name}`, 'success');
+                    closeModal();
+                } else {
+                    showNotification('❌ Error al enviar el mensaje', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('❌ Error al enviar el mensaje', 'error');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = '📤 Enviar por WhatsApp';
+            }
+        }
+
+        // Ver detalles del cliente
+        function viewDetails(clientId) {
+            window.location.href = `/clients/detail/${clientId}`;
+        }
+
+        // Enviar recordatorios masivos
+        async function sendBulkReminders() {
+            const confirmed = confirm('¿Deseas enviar recordatorios a todos los clientes con pagos pendientes?');
+            
+            if (!confirmed) return;
+            
+            showNotification('📨 Enviando recordatorios masivos...', 'info');
+            
+            let sent = 0;
+            const year = document.getElementById('yearFilter').value;
+            
+            for (let clientId in clientsData) {
+                const client = clientsData[clientId];
+                const payments = paymentsData[clientId] || {};
+                
+                // Buscar pagos pendientes
+                for (let month in payments) {
+                    if (payments[month].status === 'pending' && client.phone) {
+                        const message = messageTemplates.recordatorio
+                            .replace(/{nombre}/g, client.name)
+                            .replace(/{monto}/g, payments[month].amount.toFixed(2))
+                            .replace(/{mes}/g, monthNames[parseInt(month) - 1]);
+                        
+                        try {
+                            await fetch('/whatsapp/enqueue', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    client_id: clientId,
+                                    message: message,
+                                    template: 'recordatorio',
+                                    attachment: null,
+                                    scheduled_at: null
+                                })
+                            });
+                            sent++;
+                        } catch (error) {
+                            console.error('Error enviando a', client.name, error);
+                        }
+                        
+                        break; // Solo enviar un recordatorio por cliente
+                    }
+                }
+            }
+            
+            showNotification(`✅ ${sent} recordatorios enviados`, 'success');
+        }
+
+        // Sistema de notificaciones
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? '#00b894' : type === 'error' ? '#ff7675' : '#74b9ff'};
+                color: white;
+                border-radius: 10px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+                font-weight: 600;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Cerrar modal con ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('whatsappModal').addEventListener('click', (e) => {
+            if (e.target.id === 'whatsappModal') {
+                closeModal();
+            }
+        });
+
+        // Animaciones CSS adicionales
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

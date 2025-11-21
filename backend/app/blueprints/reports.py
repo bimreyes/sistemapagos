@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, session, redirect, url_for, current_app
 from ..db import get_db
 import os
+import matplotlib
+matplotlib.use('Agg')
 bp = Blueprint('reports', __name__, url_prefix='/reports')
 def login_required(f):
     from functools import wraps

@@ -13,3 +13,13 @@ def api_client_payments(client_id):
     cur = db.execute('SELECT * FROM payments WHERE client_id=? ORDER BY year,month', (client_id,))
     rows = [dict(r) for r in cur.fetchall()]
     return jsonify(rows)
+# Agregar estas rutas al archivo existente
+@bp.route('/payment-plans', methods=['GET'])
+def api_payment_plans():
+    from ..blueprints.payment_plans import get_all_plans
+    return get_all_plans()
+
+@bp.route('/payment-plans/<int:client_id>', methods=['GET'])
+def api_client_plan(client_id):
+    from ..blueprints.payment_plans import get_client_plan
+    return get_client_plan(client_id)
